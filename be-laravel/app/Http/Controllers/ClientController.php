@@ -5,16 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
-use App\Services\Client\GetAllService;
+use App\Services\Client\GetAllClientsService;
 
 class ClientController extends Controller
 {
     /**
-     * @var GetAllService
+     * @var GetAllClientsService
      */
     private $getAllService;
 
-    public function __construct(GetAllService $getAllService)
+    public function __construct(GetAllClientsService $getAllService)
     {
         $this->getAllService = $getAllService;
     }

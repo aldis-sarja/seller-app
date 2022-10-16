@@ -4,21 +4,21 @@ namespace App\Repositories;
 
 use App\Repositories\ProductRepositoryInterface;
 use App\Models\Product;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function getAllProducts()
+    public function getAllProducts(): Collection
     {
         return Product::all();
     }
 
-    public function getProductById($id)
+    public function getProductById($id): Product
     {
         return Product::with('service.client')->findOrFail($id);
-//        return Product::findOrFail($id);
     }
 
-    public function createProduct(string $name, string $type, string $description)
+    public function createProduct(string $name, string $type, string $description): Product
     {
         return Product::create([
             'name' => $name,
@@ -27,24 +27,19 @@ class ProductRepository implements ProductRepositoryInterface
         ]);
     }
 
-    public function updateProduct(int $id, string $name, string $type, string $description)
+    public function updateProduct(int $id, string $name, string $type, string $description): Product
     {
         $product = Product::with('service.client')->findOrFail($id);
-//        $product = Product::findOrFail($id);
         $product->update([
             'name' => $name,
             'type' => $type,
             'description' => $description,
         ]);
-//        $product->name = $name;
-//        $product->type = $type;
-//        $product->description = $description;
-//        $product->save();
         return $product;
     }
 
-    public function deleteProduct(int $id)
+    public function deleteProduct(int $id): bool
     {
-        Product::destroy($id);
+        return Product::destroy($id) > 0;
     }
 }

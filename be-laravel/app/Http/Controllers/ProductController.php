@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Services\Product\CreateProductService;
+use App\Services\Product\CreateClientService;
+use App\Services\Product\DeleteClientService;
 use App\Services\Product\GetAllProductsService;
 use App\Services\Product\GetProductByIdService;
+use App\Services\Product\UpdateClientService;
 
 class ProductController extends Controller
 {
@@ -20,19 +22,31 @@ class ProductController extends Controller
      */
     private $getProductByIdService;
     /**
-     * @var CreateProductService
+     * @var CreateClientService
      */
     private $createProductService;
+    /**
+     * @var DeleteClientService
+     */
+    private $deleteProductService;
+    /**
+     * @var UpdateClientService
+     */
+    private $updateProductService;
 
     public function __construct(
         GetAllProductsService $getAllProductsService,
         GetProductByIdService $getProductByIdService,
-        CreateProductService  $createProductService
+        CreateClientService   $createProductService,
+        UpdateClientService   $updateProductService,
+        DeleteClientService   $deleteProductService
     )
     {
         $this->getAllProductsService = $getAllProductsService;
         $this->getProductByIdService = $getProductByIdService;
         $this->createProductService = $createProductService;
+        $this->deleteProductService = $deleteProductService;
+        $this->updateProductService = $updateProductService;
     }
 
     /**
@@ -42,8 +56,14 @@ class ProductController extends Controller
      */
     public function index()
     {
+        try {
+            $data = $this->getAllProductsService->execute();
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Not found! ' . $e->getMessage()], 404);
+        }
+
         return response()->json([
-            'data' => $this->getAllProductsService->execute()
+            'data' => $data
         ]);
     }
 
@@ -66,8 +86,15 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $validatedData = $request->validated();
+
+        try {
+            $data = $this->createProductService->execute($validatedData);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Can\'t create! ' . $e->getMessage()], 404);
+        }
+
         return response()->json([
-            'data' => $this->createProductService->execute($validatedData)
+            'data' => $data
         ]);
     }
 
@@ -79,8 +106,14 @@ class ProductController extends Controller
      */
     public function show(int $id) //show(Product $product)
     {
+        try {
+            $data = $this->getProductByIdService->execute($id);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Not found! ' . $e->getMessage()], 404);
+        }
+
         return response()->json([
-            'data' => $this->getProductByIdService->execute($id)
+            'data' => $data
         ]);
     }
 
@@ -104,7 +137,11 @@ class ProductController extends Controller
      */
     public function update(int $id, UpdateProductRequest $request)
     {
-        //
+        try {
+            $res = $this->updateProductService->execute($id, $request);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Not found! ' . $e->getMessage()], 404);
+        }
     }
 
     /**
@@ -113,8 +150,8 @@ class ProductController extends Controller
      * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(int $id)
     {
-        //
+        $res = $this->deleteProductService->execute($id);
     }
 }

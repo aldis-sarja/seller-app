@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 use App\Services\Product\CreateProductService;
+use App\Services\Product\DeleteProductService;
 use App\Services\Product\GetProductByIdService;
 use App\Services\Product\UpdateProductService;
 use Tests\Testcase;
@@ -85,5 +86,20 @@ class ProductTest extends TestCase
         $this->assertEquals('TV02', $product->name);
         $this->assertEquals('vegetable', $product->type);
         $this->assertEquals('Don\'t eat!', $product->description);
+    }
+
+    public function test_it_should_be_able_to_delete_product()
+    {
+        $request = new StoreProductRequest([
+            'name' => 'TV01',
+            'type' => 'electronics',
+            'description' => 'The thing, that we almost are not using',
+        ]);
+
+        (new CreateProductService(new ProductRepository))->execute($request);
+
+        $res = (new DeleteProductService(new ProductRepository))->execute(1);
+
+        $this->assertEquals(true, $res);
     }
 }
