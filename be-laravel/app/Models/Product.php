@@ -9,7 +9,6 @@ class Product extends Model
 {
     use HasFactory;
 
-//    protected $with = ['service'];
     protected $fillable = [
         'name',
         'type',

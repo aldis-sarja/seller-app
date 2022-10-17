@@ -9,7 +9,13 @@ class Service extends Model
 {
     use HasFactory;
 
-//    protected $with = ['client'];
+    protected $fillable = [
+        'client_id',
+        'product_id',
+        'price',
+        'date',
+    ];
+
 
     public function client()
     {
