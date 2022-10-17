@@ -18,9 +18,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/', [\App\Http\Controllers\ProductController::class, 'index']);
+Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
 Route::get('/products/{id}', [\App\Http\Controllers\ProductController::class, 'show']);
 Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store']);
+Route::put('/products/{id}', [\App\Http\Controllers\ProductController::class, 'update']);
+Route::delete('/products/{id}', [\App\Http\Controllers\ProductController::class, 'destroy']);
+//Route::post('/products', function (Request $request) {
+//    return "Hello?";
+//});
 
 Route::get('/clients', [\App\Http\Controllers\ClientController::class, 'index']);
 

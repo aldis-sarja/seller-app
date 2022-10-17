@@ -5,41 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Services\Product\CreateClientService;
-use App\Services\Product\DeleteClientService;
+use App\Services\Product\CreateProductService;
+use App\Services\Product\DeleteProductService;
 use App\Services\Product\GetAllProductsService;
 use App\Services\Product\GetProductByIdService;
-use App\Services\Product\UpdateClientService;
+use App\Services\Product\UpdateProductService;
+use http\Env\Request;
 
 class ProductController extends Controller
 {
-    /**
-     * @var GetAllProductsService
-     */
     private $getAllProductsService;
-    /**
-     * @var GetProductByIdService
-     */
     private $getProductByIdService;
-    /**
-     * @var CreateClientService
-     */
     private $createProductService;
-    /**
-     * @var DeleteClientService
-     */
     private $deleteProductService;
-    /**
-     * @var UpdateClientService
-     */
     private $updateProductService;
 
     public function __construct(
         GetAllProductsService $getAllProductsService,
         GetProductByIdService $getProductByIdService,
-        CreateClientService   $createProductService,
-        UpdateClientService   $updateProductService,
-        DeleteClientService   $deleteProductService
+        CreateProductService   $createProductService,
+        UpdateProductService   $updateProductService,
+        DeleteProductService   $deleteProductService
     )
     {
         $this->getAllProductsService = $getAllProductsService;
@@ -49,11 +35,6 @@ class ProductController extends Controller
         $this->updateProductService = $updateProductService;
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         try {
@@ -77,18 +58,12 @@ class ProductController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \App\Http\Requests\StoreProductRequest $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreProductRequest $request)
     {
-        $validatedData = $request->validated();
+        $request->validated();
 
         try {
-            $data = $this->createProductService->execute($validatedData);
+            $data = $this->createProductService->execute($request);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Can\'t create! ' . $e->getMessage()], 404);
         }
@@ -98,13 +73,7 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(int $id) //show(Product $product)
+    public function show(int $id)
     {
         try {
             $data = $this->getProductByIdService->execute($id);
@@ -128,30 +97,26 @@ class ProductController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \App\Http\Requests\UpdateProductRequest $request
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
-     */
     public function update(int $id, UpdateProductRequest $request)
     {
+        $request->validated();
+
         try {
-            $res = $this->updateProductService->execute($id, $request);
+            $data = $this->updateProductService->execute($id, $request);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Not found! ' . $e->getMessage()], 404);
         }
+
+        return response()->json([
+            'data' => $data
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(int $id)
     {
         $res = $this->deleteProductService->execute($id);
+        if (!$res) {
+            return response()->json(['message' => 'Not found! '], 404);
+        }
     }
 }
