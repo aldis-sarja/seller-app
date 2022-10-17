@@ -5,82 +5,93 @@ namespace App\Http\Controllers;
 use App\Models\Service;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
+use App\Services\Service\CreateServiceService;
+use App\Services\Service\DeleteServiceService;
+use App\Services\Service\GetAllServicesService;
+use App\Services\Service\GetServiceByIdService;
+use App\Services\Service\UpdateServiceService;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    private GetAllServicesService $getAllServicesService;
+    private GetServiceByIdService $getServiceByIdService;
+    private CreateServiceService $createServiceService;
+    private UpdateServiceService $updateServiceService;
+    private DeleteServiceService $deleteServiceService;
+
+    public function __construct(
+        GetAllServicesService $getAllServicesService,
+        GetServiceByIdService $getServiceByIdService,
+        CreateServiceService $createServiceService,
+        UpdateServiceService $updateServiceService,
+        DeleteServiceService $deleteServiceService
+
+    )
+    {
+        $this->getAllServicesService = $getAllServicesService;
+        $this->getServiceByIdService = $getServiceByIdService;
+        $this->createServiceService = $createServiceService;
+        $this->updateServiceService = $updateServiceService;
+        $this->deleteServiceService = $deleteServiceService;
+    }
+
     public function index()
     {
-        //
+        try {
+            $data = $this->getAllServicesService->execute();
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Not found! ' . $e->getMessage()], 404);
+        }
+        return response()->json([
+            'data' => $data
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreServiceRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(StoreServiceRequest $request)
     {
-        //
+        $request->validated();
+
+        try {
+            $data = $this->createServiceService->execute($request);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Can\'t create! ' . $e->getMessage()], 404);
+        }
+
+        return response()->json([
+            'data' => $data
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Service $service)
+    public function show(int $id)
     {
-        //
+        try {
+            $data = $this->getServiceByIdService->execute($id);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Not found! ' . $e->getMessage()], 404);
+        }
+
+        return response()->json([
+            'data' => $data
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Service $service)
+    public function update(int $id, UpdateServiceRequest $request)
     {
-        //
+        try {
+            $data = $this->updateServiceService->execute($id, $request);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Not found! ' . $e->getMessage()], 404);
+        }
+
+        return response()->json([
+            'data' => $data
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateServiceRequest  $request
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateServiceRequest $request, Service $service)
+    public function destroy(int $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Service $service)
-    {
-        //
+        if (!$this->deleteServiceService->execute($id)) {
+            return response()->json(['message' => 'Not found! '], 404);
+        }
     }
 }

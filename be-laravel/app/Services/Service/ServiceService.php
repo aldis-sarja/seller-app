@@ -6,7 +6,7 @@ use App\Repositories\ServiceRepositoryInterface;
 
 abstract class ServiceService
 {
-    protected $serviceRepository;
+    protected ServiceRepositoryInterface $serviceRepository;
 
     public function __construct(ServiceRepositoryInterface $serviceRepository)
     {

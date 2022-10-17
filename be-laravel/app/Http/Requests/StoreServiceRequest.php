@@ -24,9 +24,9 @@ class StoreServiceRequest extends FormRequest
     public function rules()
     {
         return [
-            'client_id' => 'required|number|exists:clients,id',
-            'product_id' => 'required|number|exists:products,id',
-            'price' => 'required|number',
+            'client_id' => 'required|exists:clients,id',
+            'product_id' => 'required|exists:products,id',
+            'price' => 'required|numeric',
             'date' => 'required|date',
         ];
     }

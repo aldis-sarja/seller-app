@@ -6,7 +6,7 @@ use App\Repositories\ProductRepositoryInterface;
 
 abstract class ProductService
 {
-    protected $productRepository;
+    protected ProductRepositoryInterface $productRepository;
 
     public function __construct(ProductRepositoryInterface $productRepository)
     {

@@ -9,10 +9,6 @@ class CreateProductService extends ProductService
 {
     public function execute(StoreProductRequest $request): Product
     {
-        return $this->productRepository->createProduct(
-            $request->get('name'),
-            $request->get('type'),
-            $request->get('description')
-        );
+        return $this->productRepository->createProduct($request);
     }
 }

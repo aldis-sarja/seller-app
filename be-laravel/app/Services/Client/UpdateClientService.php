@@ -9,11 +9,6 @@ class UpdateClientService extends ClientService
 {
     public function execute(int $id, UpdateclientRequest $request): Client
     {
-        return $this->clientRepository->updateClient(
-            $id,
-            $request->get('name'),
-            $request->get('address'),
-            $request->get('description')
-        );
+        return $this->clientRepository->updateClient($id, $request);
     }
 }

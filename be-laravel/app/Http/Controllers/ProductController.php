@@ -10,15 +10,14 @@ use App\Services\Product\DeleteProductService;
 use App\Services\Product\GetAllProductsService;
 use App\Services\Product\GetProductByIdService;
 use App\Services\Product\UpdateProductService;
-use http\Env\Request;
 
 class ProductController extends Controller
 {
-    private $getAllProductsService;
-    private $getProductByIdService;
-    private $createProductService;
-    private $deleteProductService;
-    private $updateProductService;
+    private GetAllProductsService $getAllProductsService;
+    private GetProductByIdService $getProductByIdService;
+    private CreateProductService $createProductService;
+    private DeleteProductService $deleteProductService;
+    private UpdateProductService $updateProductService;
 
     public function __construct(
         GetAllProductsService $getAllProductsService,
@@ -46,16 +45,6 @@ class ProductController extends Controller
         return response()->json([
             'data' => $data
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     public function store(StoreProductRequest $request)
@@ -86,17 +75,6 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
     public function update(int $id, UpdateProductRequest $request)
     {
         $request->validated();
@@ -114,8 +92,7 @@ class ProductController extends Controller
 
     public function destroy(int $id)
     {
-        $res = $this->deleteProductService->execute($id);
-        if (!$res) {
+        if (!$this->deleteProductService->execute($id)) {
             return response()->json(['message' => 'Not found! '], 404);
         }
     }

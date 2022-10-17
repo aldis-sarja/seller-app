@@ -9,11 +9,6 @@ class UpdateProductService extends ProductService
 {
     public function execute(int $id, UpdateProductRequest $request): Product
     {
-        return $this->productRepository->updateProduct(
-            $id,
-            $request->get('name'),
-            $request->get('type'),
-            $request->get('description')
-        );
+        return $this->productRepository->updateProduct($id, $request);
     }
 }

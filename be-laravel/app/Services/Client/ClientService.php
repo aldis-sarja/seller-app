@@ -6,10 +6,7 @@ use App\Repositories\ClientRepositoryInterface;
 
 abstract class ClientService
 {
-    /**
-     * @var ClientRepositoryInterface
-     */
-    protected $clientRepository;
+    protected ClientRepositoryInterface $clientRepository;
 
     public function __construct(ClientRepositoryInterface $clientRepository)
     {

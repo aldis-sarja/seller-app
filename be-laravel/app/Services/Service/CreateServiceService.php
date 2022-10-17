@@ -9,11 +9,6 @@ class CreateServiceService extends ServiceService
 {
     public function execute(StoreServiceRequest $request): Service
     {
-        return $this->serviceRepository->createService(
-            $request->get('client_id'),
-            $request->get('product_id'),
-            $request->get('price'),
-            $request->get('date')
-        );
+        return $this->serviceRepository->createService($request);
     }
 }

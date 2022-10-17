@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Repositories\ProductRepositoryInterface;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
@@ -18,22 +20,22 @@ class ProductRepository implements ProductRepositoryInterface
         return Product::with('service.client')->findOrFail($id);
     }
 
-    public function createProduct(string $name, string $type, string $description): Product
+    public function createProduct(StoreProductRequest $request): Product
     {
         return Product::create([
-            'name' => $name,
-            'type' => $type,
-            'description' => $description
+            'name' => $request->get('name'),
+            'type' => $request->get('type'),
+            'description' => $request->get('description')
         ]);
     }
 
-    public function updateProduct(int $id, string $name, string $type, string $description): Product
+    public function updateProduct(int $id, UpdateProductRequest $request): Product
     {
         $product = Product::with('service.client')->findOrFail($id);
         $product->update([
-            'name' => $name,
-            'type' => $type,
-            'description' => $description,
+            'name' => $request->get('name'),
+            'type' => $request->get('type'),
+            'description' => $request->get('description')
         ]);
         return $product;
     }

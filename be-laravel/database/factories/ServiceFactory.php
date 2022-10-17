@@ -16,15 +16,21 @@ class ServiceFactory extends Factory
      */
     public function definition()
     {
-        $product_id = rand(1, Product::count());
-        $product = Product::find($product_id);
-        $product->reserved = Carbon::now();
-        return [
-            'client_id' => rand(1, Client::count()),
-            'product_id' => $product_id,
-            'price' => $this->faker->numberBetween(1, 1000000),
-            'date' => $this->faker->dateTime(),
-        ];
+        do {
+            $product_id = rand(1, Product::count());
+            $product = Product::find($product_id);
+        } while ($product->reserved);
+
+            $product->reserved = Carbon::now();
+            $product->update();
+
+            return [
+                'client_id' => rand(1, Client::count()),
+                'product_id' => $product_id,
+                'price' => $this->faker->numberBetween(1, 1000000),
+                'date' => $this->faker->dateTime(),
+            ];
+
 
     }
 }
