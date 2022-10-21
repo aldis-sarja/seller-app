@@ -19,7 +19,8 @@
             <nuxt-link :to="'/product/' + service.product.id">
               <em>{{ service.product.name }}</em>
             </nuxt-link>
-            sold for €{{ (service.price / 100).toFixed(2) }}
+            sold for €{{ (service.price / 100).toFixed(2) }} at
+            {{ service.date }}
           </li>
         </ul>
       </div>

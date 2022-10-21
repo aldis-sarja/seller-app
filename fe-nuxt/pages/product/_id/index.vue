@@ -10,11 +10,12 @@
         <div class="type">
           {{ product.type }}
         </div>
-        <div v-if="product.reserved" class="client">
+        <div v-if="product.service" class="client">
           has taken by
           <nuxt-link :to="'/client/' + product.service.client.id">
             <em>{{ product.service.client.name }}</em>
           </nuxt-link>
+          at {{ product.service.date }}
         </div>
       </div>
       <div class="description">
