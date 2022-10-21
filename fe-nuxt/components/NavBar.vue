@@ -3,8 +3,8 @@
     <div class="nav-bar">
       <div class="side-links">
         <nuxt-link class="menu-item" :to="'/'">Products</nuxt-link>
-        <nuxt-link class="menu-item" :to="'/ClientList'">Clients</nuxt-link>
-        <nuxt-link class="menu-item" :to="'/ServiceList'">Orders</nuxt-link>
+        <nuxt-link class="menu-item" :to="'/clients'">Clients</nuxt-link>
+        <nuxt-link class="menu-item" :to="'/orders'">Orders</nuxt-link>
       </div>
     </div>
   </div>

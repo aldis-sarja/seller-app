@@ -1,38 +1,37 @@
 <template>
   <div>
     <NavBar />
-
     <div class="frame">
-      <div class="add-product">
+      <div class="add-client">
         <form
-          class="add-product-section"
+          class="add-client-section"
           ref="formName"
-          @submit.prevent="onAddProduct"
+          @submit.prevent="onAddClient"
         >
           <div class="input-section">
             <input
               class="input"
               type="text"
-              v-model="newProductName"
-              placeholder="Product Name"
+              v-model="newClientName"
+              placeholder="Client Name"
               required
             />
             <input
               class="input"
               type="text"
-              v-model="newProductType"
-              placeholder="Product Type"
+              v-model="newClientAddress"
+              placeholder="Client Address"
               required
             />
             <textarea
               class="input"
-              v-model="newProductDescription"
-              placeholder="Product Description"
+              v-model="newClientDescription"
+              placeholder="Client Description"
               required
             >
             </textarea>
           </div>
-          <input class="button" type="submit" value="Add Product" />
+          <input class="button" type="submit" value="Add Client" />
         </form>
 
         <ValidationErrors
@@ -42,44 +41,34 @@
         />
       </div>
 
-      <div class="product-list">
+      <div class="client-list">
         <table>
           <thead>
             <tr>
-              <th>Aviable</th>
               <th>Name</th>
-              <th>Type</th>
+              <th>Adress</th>
               <th>Description</th>
             </tr>
           </thead>
           <tbody>
             <tr
               class="product-item"
-              v-for="product in productList"
-              v-bind:key="product"
+              v-for="client in clientList"
+              v-bind:key="client"
             >
               <th>
-                <img
-                  width="16px"
-                  height="16px"
-                  v-if="!product.reserved"
-                  src="~/assets/images/check.svg"
-                />
-                <span v-else class="red-bull">&bull;</span>
-              </th>
-              <th>
-                <nuxt-link :to="'/product/' + product.id">
-                  {{ product.name }}
+                <nuxt-link :to="'/client/' + client.id">
+                  {{ client.name }}
                 </nuxt-link>
               </th>
               <th>
-                <nuxt-link :to="'/product/' + product.id">
-                  {{ product.type }}
+                <nuxt-link :to="'/client/' + client.id">
+                  {{ client.address }}
                 </nuxt-link>
               </th>
               <th class="description">
-                <nuxt-link :to="'/product/' + product.id">
-                  {{ product.description }}
+                <nuxt-link :to="'/client/' + client.id">
+                  {{ client.description }}
                 </nuxt-link>
               </th>
             </tr>
@@ -93,30 +82,30 @@
 <script>
 import Vue from "vue";
 import axios from "axios";
-import ValidationErrors from "@/components/ValidationErrors";
+// import ValidationErrors from "@/components/ValidationErrors";
 
 export default Vue.extend({
-  components: { ValidationErrors },
+  // components: { ValidationErrors },
 
-  name: "IndexPage",
+  name: "ClientsPage",
 
   data() {
     return {
-      productList: [],
-      newProductName: null,
-      newProductType: null,
-      newProductDescription: null,
+      clientList: [],
+      newClientName: null,
+      newClienAddress: null,
+      newClientDescription: null,
 
       validationErrors: null,
     };
   },
 
   created() {
-    this.getProducts();
+    this.getClients();
   },
 
   methods: {
-    async getProducts() {
+    async getClients() {
       const payload = {
         headers: {
           "Content-Type": "application/json",
@@ -126,21 +115,21 @@ export default Vue.extend({
       };
       try {
         const res = await axios.get(
-          this.$config.BACKEND_URI + "/products",
+          this.$config.BACKEND_URI + "/clients",
           payload
         );
-        this.productList = res.data.data;
+        this.clientList = res.data.data;
       } catch (error) {
         this.validationErrors = error.response.data;
       }
     },
 
-    async onAddProduct() {
+    async onAddClient() {
       this.validationErrors = null;
       const payload = {
-        name: this.newProductName,
-        type: this.newProductType,
-        description: this.newProductDescription,
+        name: this.newClientName,
+        address: this.newClientAddress,
+        description: this.newClientDescription,
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -150,10 +139,10 @@ export default Vue.extend({
 
       try {
         const res = await axios.post(
-          this.$config.BACKEND_URI + "/products",
+          this.$config.BACKEND_URI + "/clients",
           payload
         );
-        this.productList.push(res.data.data);
+        this.producClient.push(res.data.data);
         this.$refs.formName.reset();
       } catch (error) {
         this.validationErrors = error.response.data;
@@ -172,14 +161,14 @@ export default Vue.extend({
   padding: 20px;
 }
 
-.add-product {
+.add-client {
   display: flex;
   flex-direction: row;
   padding: 20px;
   margin-right: 20px;
 }
 
-.add-product-section {
+.add-client-section {
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -207,7 +196,7 @@ export default Vue.extend({
   cursor: pointer;
 }
 
-.product-list {
+.client-list {
   padding: 20px;
 }
 
@@ -216,15 +205,11 @@ th {
   /* padding: 7px 4px 0 4px; */
   text-align: left;
 }
-.product-item:hover {
+.client-item:hover {
   background: lightgray;
 }
 
 .description {
   word-wrap: normal;
-}
-
-.red-bull {
-  color: red;
 }
 </style>

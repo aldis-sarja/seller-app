@@ -1,64 +1,77 @@
 <template>
   <div>
-    <div class="headline">
-      <div class="name">
-        <b>{{ product.name }}</b>
+    <NavBar />
+
+    <div class="frame">
+      <div class="headline">
+        <div class="name">
+          <b>{{ product.name }}</b>
+        </div>
+        <div class="type">
+          {{ product.type }}
+        </div>
+        <div v-if="product.reserved" class="client">
+          has taken by
+          <nuxt-link :to="'/client/' + product.service.client.id">
+            <em>{{ product.service.client.name }}</em>
+          </nuxt-link>
+        </div>
       </div>
-      <div class="type">
-        {{ product.type }}
+      <div class="description">
+        {{ product.description }}
       </div>
-      <div v-if="product.reserved" class="client">
-        has taken by <em>{{ product.service.client.name }}</em>
-      </div>
+      <nuxt-link
+        v-if="!product.reserved"
+        :to="'/order?product_id=' + product.id"
+      >
+        Add Product to Client
+      </nuxt-link>
+
+      <button type="button" class="button" v-on:click="onToggleEdit">
+        Edit Product
+      </button>
+
+      <dir v-if="toggleEdit">
+        <div class="edit-product">
+          <form
+            class="edit-product-section"
+            ref="formName"
+            @submit.prevent="onEditProduct"
+          >
+            <div class="input-section">
+              <input
+                class="input"
+                type="text"
+                v-model="productNewName"
+                placeholder="Product Name"
+                required
+              />
+              <input
+                class="input"
+                type="text"
+                v-model="productNewType"
+                placeholder="Product Type"
+                required
+              />
+              <textarea
+                class="input"
+                v-model="productNewDescription"
+                placeholder="Product Description"
+                required
+              >
+              </textarea>
+            </div>
+            <input class="button" type="submit" value="Change" />
+          </form>
+
+          <ValidationErrors
+            class="error-section"
+            v-if="validationErrors"
+            :errors="validationErrors"
+          />
+        </div>
+      </dir>
     </div>
-    <div class="description">
-      {{ product.description }}
-    </div>
-
-    <button type="button" class="button" v-on:click="onToggleEdit">
-      Edit Product
-    </button>
-
-    <dir v-if="toggleEdit">
-      <div class="edit-product">
-        <form
-          class="edit-product-section"
-          ref="formName"
-          @submit.prevent="onEditProduct"
-        >
-          <div class="input-section">
-            <input
-              class="input"
-              type="text"
-              v-model="productNewName"
-              placeholder="Product Name"
-              required
-            />
-            <input
-              class="input"
-              type="text"
-              v-model="productNewType"
-              placeholder="Product Type"
-              required
-            />
-            <textarea
-              class="input"
-              v-model="productNewDescription"
-              placeholder="Product Description"
-              required
-            >
-            </textarea>
-          </div>
-          <input class="button" type="submit" value="Change" />
-        </form>
-
-        <ValidationErrors
-          class="error-section"
-          v-if="validationErrors"
-          :errors="validationErrors"
-        />
-      </div>
-    </dir>
   </div>
 </template>
 
@@ -103,8 +116,10 @@ export default Vue.extend({
         this.productNewName = this.product.name;
         this.productNewType = this.product.type;
         this.productNewDescription = this.product.description;
+
+        this.$store.commit("setProduct", res.data.data);
       } catch (error) {
-        this.validationErrors = error.response.data.errors;
+        this.validationErrors = error.response.data;
         console.log("TERRIBLE ERROR:", error);
       }
     },
@@ -129,9 +144,8 @@ export default Vue.extend({
         );
         this.product = res.data.data;
         this.$refs.formName.reset();
-        // this.fetchProducts();
       } catch (error) {
-        this.validationErrors = error;
+        this.validationErrors = error.response.data;
       }
     },
 
@@ -143,6 +157,10 @@ export default Vue.extend({
 </script>
 
 <style scoped>
+.frame {
+  margin-top: 30px;
+}
+
 .headline {
   display: flex;
   flex-direction: row;

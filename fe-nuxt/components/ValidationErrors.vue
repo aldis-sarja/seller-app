@@ -22,20 +22,14 @@ export default {
   },
 
   mounted() {
-    // console.log("MOUNTED");
-    if (this.errors.response.data.errors) {
-      //   console.log("IF:01");
-      const errorCollection = this.errors.response.data.errors;
-      for (const key in errorCollection) {
-        for (const errorIndex in errorCollection[key]) {
-          this.listOfErrors.push(errorCollection[key][errorIndex]);
+    if (this.errors.errors) {
+      for (const key in this.errors.errors) {
+        for (const errorIndex in this.errors.errors[key]) {
+          this.listOfErrors.push(this.errors.errors[key][errorIndex]);
         }
       }
     } else if (this.errors.message) {
-      // console.log("ELSE IF:01");
       this.listOfErrors = [this.errors.message];
-    } else {
-      console.log(this.errors);
     }
   },
 };
