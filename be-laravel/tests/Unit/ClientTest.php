@@ -3,8 +3,7 @@
 namespace Tests\Unit;
 
 
-use App\Http\Requests\StoreClientRequest;
-use App\Http\Requests\UpdateClientRequest;
+use App\Http\Requests\ClientRequest;
 use App\Models\Client;
 
 use App\Repositories\ClientRepository;
@@ -34,7 +33,7 @@ class ClientTest extends TestCase
 
     public function test_it_should_be_able_to_create_client()
     {
-        $request = new StoreClientRequest([
+        $request = new ClientRequest([
             'name' => 'Client01',
             'address' => 'space',
             'description' => '--====+====--',
@@ -50,7 +49,7 @@ class ClientTest extends TestCase
 
     public function test_it_should_be_able_to_get_client_by_id()
     {
-        $request = new StoreClientRequest([
+        $request = new ClientRequest([
             'name' => 'Client01',
             'address' => 'space',
             'description' => '--====+====--',
@@ -68,7 +67,7 @@ class ClientTest extends TestCase
 
     public function test_it_should_be_able_to_update_client()
     {
-        $request = new StoreClientRequest([
+        $request = new ClientRequest([
             'name' => 'Client01',
             'address' => 'space',
             'description' => '--====+====--',
@@ -76,7 +75,7 @@ class ClientTest extends TestCase
 
         $client = (new CreateClientService(new ClientRepository))->execute($request);
 
-        $request = new UpdateClientRequest([
+        $request = new ClientRequest([
             'name' => 'Client02',
             'address' => 'Earth',
             'description' => '--====[]====--',
@@ -92,7 +91,7 @@ class ClientTest extends TestCase
 
     public function test_it_should_be_able_to_delete_client()
     {
-        $request = new StoreClientRequest([
+        $request = new ClientRequest([
             'name' => 'Client01',
             'address' => 'space',
             'description' => '--====+====--',

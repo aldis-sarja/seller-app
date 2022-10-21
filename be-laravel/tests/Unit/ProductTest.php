@@ -2,8 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 use App\Services\Product\CreateProductService;
@@ -32,7 +31,7 @@ class ProductTest extends TestCase
 
     public function test_it_should_be_able_to_create_product()
     {
-        $request = new StoreProductRequest([
+        $request = new ProductRequest([
             'name' => 'TV01',
             'type' => 'electronics',
             'description' => 'The thing, that we almost are not using',
@@ -48,7 +47,7 @@ class ProductTest extends TestCase
 
     public function test_it_should_be_able_to_get_product_by_id()
     {
-        $request = new StoreProductRequest([
+        $request = new ProductRequest([
             'name' => 'TV01',
             'type' => 'electronics',
             'description' => 'The thing, that we almost are not using',
@@ -66,7 +65,7 @@ class ProductTest extends TestCase
 
     public function test_it_should_be_able_to_update_product()
     {
-        $request = new StoreProductRequest([
+        $request = new ProductRequest([
             'name' => 'TV01',
             'type' => 'electronics',
             'description' => 'The thing, that we almost are not using',
@@ -74,7 +73,7 @@ class ProductTest extends TestCase
 
         $product = (new CreateProductService(new ProductRepository))->execute($request);
 
-        $request = new UpdateProductRequest([
+        $request = new ProductRequest([
             'name' => 'TV02',
             'type' => 'vegetable',
             'description' => 'Don\'t eat!',
@@ -90,7 +89,7 @@ class ProductTest extends TestCase
 
     public function test_it_should_be_able_to_delete_product()
     {
-        $request = new StoreProductRequest([
+        $request = new ProductRequest([
             'name' => 'TV01',
             'type' => 'electronics',
             'description' => 'The thing, that we almost are not using',

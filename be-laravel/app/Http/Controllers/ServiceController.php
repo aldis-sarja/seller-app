@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
-use App\Http\Requests\StoreServiceRequest;
-use App\Http\Requests\UpdateServiceRequest;
+use App\Http\Requests\ServiceRequest;
 use App\Services\Service\CreateServiceService;
 use App\Services\Service\DeleteServiceService;
 use App\Services\Service\GetAllServicesService;
@@ -47,10 +46,8 @@ class ServiceController extends Controller
         ]);
     }
 
-    public function store(StoreServiceRequest $request)
+    public function store(ServiceRequest $request)
     {
-        $request->validated();
-
         try {
             $data = $this->createServiceService->execute($request);
         } catch (\Exception $e) {
@@ -75,7 +72,7 @@ class ServiceController extends Controller
         ]);
     }
 
-    public function update(int $id, UpdateServiceRequest $request)
+    public function update(int $id, ServiceRequest $request)
     {
         try {
             $data = $this->updateServiceService->execute($id, $request);

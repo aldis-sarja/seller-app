@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
+use App\Http\Requests\ProductRequest;
 use App\Services\Product\CreateProductService;
 use App\Services\Product\DeleteProductService;
 use App\Services\Product\GetAllProductsService;
@@ -47,9 +46,8 @@ class ProductController extends Controller
         ]);
     }
 
-    public function store(StoreProductRequest $request)
+    public function store(ProductRequest $request)
     {
-        $request->validated();
 
         try {
             $data = $this->createProductService->execute($request);
@@ -75,10 +73,8 @@ class ProductController extends Controller
         ]);
     }
 
-    public function update(int $id, UpdateProductRequest $request)
+    public function update(int $id, ProductRequest $request)
     {
-        $request->validated();
-
         try {
             $data = $this->updateProductService->execute($id, $request);
         } catch (\Exception $e) {

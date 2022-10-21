@@ -2,8 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\StoreServiceRequest;
-use App\Http\Requests\UpdateServiceRequest;
+use App\Http\Requests\ServiceRequest;
 use App\Models\Product;
 use App\Repositories\ServiceRepositoryInterface;
 use App\Models\Service;
@@ -23,7 +22,7 @@ class ServiceRepository implements ServiceRepositoryInterface
         return Service::with(['client', 'product'])->findOrFail($id);
     }
 
-    public function createService(StoreServiceRequest $request): Service
+    public function createService(ServiceRequest $request): Service
     {
         $product = Product::findOrFail($request->get('product_id'));
         if ($product->reserved)
@@ -42,7 +41,7 @@ class ServiceRepository implements ServiceRepositoryInterface
         ]);
     }
 
-    public function updateService(int $id, UpdateServiceRequest $request): Service
+    public function updateService(int $id, ServiceRequest $request): Service
     {
         $service = Service::with(['client', 'product'])->findOrFail($id);
         $service->update([

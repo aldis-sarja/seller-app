@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClientRequest;
 use App\Models\Client;
-use App\Http\Requests\StoreClientRequest;
-use App\Http\Requests\UpdateClientRequest;
 use App\Services\Client\CreateClientService;
 use App\Services\Client\DeleteClientService;
 use App\Services\Client\GetAllClientsService;
@@ -46,10 +45,8 @@ class ClientController extends Controller
         ]);
     }
 
-    public function store(StoreClientRequest $request)
+    public function store(ClientRequest $request)
     {
-        $request->validated();
-
         try {
             $data = $this->createClientService->execute($request);
         } catch (\Exception $e) {
@@ -74,7 +71,7 @@ class ClientController extends Controller
         ]);
     }
 
-    public function update(int $id, UpdateClientRequest $request)
+    public function update(int $id, ClientRequest $request)
     {
         try {
             $data = $this->updateClientService->execute($id, $request);

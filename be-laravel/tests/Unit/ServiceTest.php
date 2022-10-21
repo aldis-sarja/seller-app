@@ -2,10 +2,9 @@
 
 namespace Tests\Unit;
 
-use App\Http\Requests\StoreClientRequest;
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\StoreServiceRequest;
-use App\Http\Requests\UpdateServiceRequest;
+use App\Http\Requests\ClientRequest;
+use App\Http\Requests\ProductRequest;
+use App\Http\Requests\ServiceRequest;
 use App\Models\Service;
 use App\Repositories\ClientRepository;
 use App\Repositories\ProductRepository;
@@ -42,21 +41,21 @@ class ServiceTest extends TestCase
 
     public function test_it_should_be_able_to_create_service()
     {
-        $request = new StoreProductRequest([
+        $request = new ProductRequest([
             'name' => 'TV01',
             'type' => 'electronics',
             'description' => 'The thing, that we almost are not using',
         ]);
         $product = (new CreateProductService(new ProductRepository))->execute($request);
 
-        $request = new StoreClientRequest([
+        $request = new ClientRequest([
             'name' => 'Client01',
             'address' => 'space',
             'description' => '--====+====--',
         ]);
         $client = (new CreateClientService(new ClientRepository))->execute($request);
 
-        $request = new StoreServiceRequest([
+        $request = new ServiceRequest([
             'client_id' => $client->id,
             'product_id' => $product->id,
             'price' => 42,
@@ -72,21 +71,21 @@ class ServiceTest extends TestCase
 
     public function test_it_should_be_able_to_get_service_by_id()
     {
-        $request = new StoreProductRequest([
+        $request = new ProductRequest([
             'name' => 'TV01',
             'type' => 'electronics',
             'description' => 'The thing, that we almost are not using',
         ]);
         $product = (new CreateProductService(new ProductRepository))->execute($request);
 
-        $request = new StoreClientRequest([
+        $request = new ClientRequest([
             'name' => 'Client01',
             'address' => 'space',
             'description' => '--====+====--',
         ]);
         $client = (new CreateClientService(new ClientRepository))->execute($request);
 
-        $request = new StoreServiceRequest([
+        $request = new ServiceRequest([
             'client_id' => $client->id,
             'product_id' => $product->id,
             'price' => 42,
@@ -106,21 +105,21 @@ class ServiceTest extends TestCase
 
     public function test_it_should_be_able_to_update_service()
     {
-        $request = new StoreProductRequest([
+        $request = new ProductRequest([
             'name' => 'TV01',
             'type' => 'electronics',
             'description' => 'The thing, that we almost are not using',
         ]);
         $product = (new CreateProductService(new ProductRepository))->execute($request);
 
-        $request = new StoreClientRequest([
+        $request = new ClientRequest([
             'name' => 'Client01',
             'address' => 'space',
             'description' => '--====+====--',
         ]);
         $client = (new CreateClientService(new ClientRepository))->execute($request);
 
-        $request = new StoreServiceRequest([
+        $request = new ServiceRequest([
             'client_id' => $client->id,
             'product_id' => $product->id,
             'price' => 42,
@@ -128,7 +127,7 @@ class ServiceTest extends TestCase
         ]);
         $service = (new CreateServiceService(new ServiceRepository))->execute($request);
 
-        $request = new UpdateServiceRequest([
+        $request = new ServiceRequest([
             'client_id' => $client->id,
             'product_id' => $product->id,
             'price' => 13,
@@ -145,21 +144,21 @@ class ServiceTest extends TestCase
 
     public function test_it_should_be_able_to_delete_service()
     {
-        $request = new StoreProductRequest([
+        $request = new ProductRequest([
             'name' => 'TV01',
             'type' => 'electronics',
             'description' => 'The thing, that we almost are not using',
         ]);
         $product = (new CreateProductService(new ProductRepository))->execute($request);
 
-        $request = new StoreClientRequest([
+        $request = new ClientRequest([
             'name' => 'Client01',
             'address' => 'space',
             'description' => '--====+====--',
         ]);
         $client = (new CreateClientService(new ClientRepository))->execute($request);
 
-        $request = new StoreServiceRequest([
+        $request = new ServiceRequest([
             'client_id' => $client->id,
             'product_id' => $product->id,
             'price' => 42,
