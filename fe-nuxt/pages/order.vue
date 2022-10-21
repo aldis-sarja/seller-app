@@ -179,8 +179,12 @@ export default Vue.extend({
           this.$config.BACKEND_URI + "/services",
           payload
         );
+
         this.$refs.formName.reset();
+
+        this.$router.push("/orders");
       } catch (error) {
+        console.log("Router Error:", error);
         this.validationErrors = error.response.data;
       }
     },

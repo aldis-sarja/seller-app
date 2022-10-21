@@ -31,6 +31,10 @@
         Edit Client
       </button>
 
+      <button type="button" class="button-delete" v-on:click="deleteClient">
+        REMOVE CLIENT
+      </button>
+
       <dir v-if="toggleEdit">
         <div class="edit-client">
           <form
@@ -152,6 +156,27 @@ export default Vue.extend({
     onToggleEdit() {
       this.toggleEdit = !this.toggleEdit;
     },
+
+    async deleteClient() {
+      const payload = {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      };
+
+      try {
+        const res = await axios.delete(
+          this.$config.BACKEND_URI + "/clients/" + this.$route.params.id,
+          payload
+        );
+
+        this.$router.push("/clients");
+      } catch (error) {
+        alert("Can't delete!");
+      }
+    },
   },
 });
 </script>
@@ -212,5 +237,16 @@ export default Vue.extend({
   margin-left: 20px;
   padding: 5px;
   cursor: pointer;
+}
+
+.button-delete {
+  border-radius: 10px;
+  width: 130px;
+  margin-top: 10px;
+  margin-left: 20px;
+  padding: 5px;
+  cursor: pointer;
+  background: lightblue;
+  color: red;
 }
 </style>

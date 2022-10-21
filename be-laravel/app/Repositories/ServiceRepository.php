@@ -15,7 +15,7 @@ class ServiceRepository implements ServiceRepositoryInterface
 {
     public function getAllServices(): Collection
     {
-        return Service::all();
+        return Service::with(['client', 'product'])->get();
     }
 
     public function getServiceById($id): Service

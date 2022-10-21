@@ -82,11 +82,8 @@
 <script>
 import Vue from "vue";
 import axios from "axios";
-// import ValidationErrors from "@/components/ValidationErrors";
 
 export default Vue.extend({
-  // components: { ValidationErrors },
-
   name: "ClientsPage",
 
   data() {
@@ -142,7 +139,7 @@ export default Vue.extend({
           this.$config.BACKEND_URI + "/clients",
           payload
         );
-        this.producClient.push(res.data.data);
+        this.clientList.push(res.data.data);
         this.$refs.formName.reset();
       } catch (error) {
         this.validationErrors = error.response.data;
