@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Http\Requests\ProductRequest;
+use App\Models\Service;
 use App\Repositories\ProductRepositoryInterface;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Collection;
@@ -41,6 +42,10 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function deleteProduct(int $id): bool
     {
+        Service::where([
+            ['product_id', '=', $id]
+        ])->delete();
+
         return Product::destroy($id) > 0;
     }
 }
