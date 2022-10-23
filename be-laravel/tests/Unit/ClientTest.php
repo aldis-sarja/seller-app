@@ -3,10 +3,10 @@
 namespace Tests\Unit;
 
 
-use App\Http\Requests\ClientRequest;
 use App\Models\Client;
 
 use App\Repositories\ClientRepository;
+use App\Services\Client\ClientData;
 use App\Services\Client\CreateClientService;
 use App\Services\Client\DeleteClientService;
 use App\Services\Client\GetClientByIdService;
@@ -33,11 +33,11 @@ class ClientTest extends TestCase
 
     public function test_it_should_be_able_to_create_client()
     {
-        $request = new ClientRequest([
-            'name' => 'Client01',
-            'address' => 'space',
-            'description' => '--====+====--',
-        ]);
+        $request = new ClientData(
+            'Client01',
+            'space',
+            '--====+====--'
+        );
 
         $client = (new CreateClientService(new ClientRepository))->execute($request);
 
@@ -49,11 +49,11 @@ class ClientTest extends TestCase
 
     public function test_it_should_be_able_to_get_client_by_id()
     {
-        $request = new ClientRequest([
-            'name' => 'Client01',
-            'address' => 'space',
-            'description' => '--====+====--',
-        ]);
+        $request = new ClientData(
+            'Client01',
+            'space',
+            '--====+====--'
+        );
 
         (new CreateClientService(new ClientRepository))->execute($request);
 
@@ -67,21 +67,22 @@ class ClientTest extends TestCase
 
     public function test_it_should_be_able_to_update_client()
     {
-        $request = new ClientRequest([
-            'name' => 'Client01',
-            'address' => 'space',
-            'description' => '--====+====--',
-        ]);
+        $request = new ClientData(
+            'Client01',
+            'space',
+            '--====+====--'
+        );
 
         $client = (new CreateClientService(new ClientRepository))->execute($request);
 
-        $request = new ClientRequest([
-            'name' => 'Client02',
-            'address' => 'Earth',
-            'description' => '--====[]====--',
-        ]);
+        $request = new ClientData(
+            'Client02',
+            'Earth',
+            '--====[]====--',
+            $client->id
+        );
 
-        $client = (new UpdateClientService(new ClientRepository))->execute($client->id, $request);
+        $client = (new UpdateClientService(new ClientRepository))->execute($request);
 
         $this->assertNotNull($client);
         $this->assertEquals('Client02', $client->name);
@@ -91,11 +92,11 @@ class ClientTest extends TestCase
 
     public function test_it_should_be_able_to_delete_client()
     {
-        $request = new ClientRequest([
-            'name' => 'Client01',
-            'address' => 'space',
-            'description' => '--====+====--',
-        ]);
+        $request = new ClientData(
+            'Client01',
+            'space',
+            '--====+====--'
+        );
 
         (new CreateClientService(new ClientRepository))->execute($request);
 

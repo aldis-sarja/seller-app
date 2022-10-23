@@ -2,13 +2,20 @@
 
 namespace App\Services\Service;
 
-use App\Http\Requests\ServiceRequest;
 use App\Models\Service;
 
 class UpdateServiceService extends ServiceService
 {
-    public function execute(int $id, ServiceRequest $request): Service
+    public function execute(ServiceData $serviceData): Service
     {
-        return $this->serviceRepository->updateService($id, $request);
+        return $this->serviceRepository->updateService(
+            new \App\Models\ServiceData(
+                $serviceData->getClientId(),
+                $serviceData->getProductId(),
+                $serviceData->getPrice(),
+                $serviceData->getDate(),
+                $serviceData->getId()
+            )
+        );
     }
 }

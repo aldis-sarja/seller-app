@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\ClientRequest;
+use App\Models\ClientData;
 use App\Models\Product;
 use App\Models\Service;
 use App\Repositories\ClientRepositoryInterface;
@@ -21,22 +21,22 @@ class ClientRepository implements ClientRepositoryInterface
         return Client::with('service.product')->findOrFail($id);
     }
 
-    public function createClient(ClientRequest $request): Client
+    public function createClient(ClientData $clientData): Client
     {
         return Client::create([
-            'name' => $request->get('name'),
-            'address' => $request->get('address'),
-            'description' => $request->get('description')
+            'name' => $clientData->getName(),
+            'address' => $clientData->getAddress(),
+            'description' => $clientData->getDescription()
         ]);
     }
 
-    public function updateClient(int $id, ClientRequest $request): Client
+    public function updateClient(ClientData $clientData): Client
     {
-        $client = Client::with('service.product')->findOrFail($id);
+        $client = Client::with('service.product')->findOrFail($clientData->getId());
         $client->update([
-            'name' => $request->get('name'),
-            'address' => $request->get('address'),
-            'description' => $request->get('description')
+            'name' => $clientData->getName(),
+            'address' => $clientData->getAddress(),
+            'description' => $clientData->getDescription()
         ]);
 
         return $client;

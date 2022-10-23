@@ -2,13 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\ProductRequest;
+use App\Models\ProductData;
 
 interface ProductRepositoryInterface
 {
     public function getAllProducts();
     public function getProductById($id);
-    public function createProduct(ProductRequest $request);
-    public function updateProduct(int $id, ProductRequest $request);
+    public function createProduct(ProductData $productData);
+    public function updateProduct(ProductData $productData);
     public function deleteProduct(int $id);
 }

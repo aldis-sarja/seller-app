@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ClientRequest;
 use App\Models\Client;
+use App\Services\Client\ClientData;
 use App\Services\Client\CreateClientService;
 use App\Services\Client\DeleteClientService;
 use App\Services\Client\GetAllClientsService;
@@ -48,7 +49,13 @@ class ClientController extends Controller
     public function store(ClientRequest $request)
     {
         try {
-            $data = $this->createClientService->execute($request);
+            $data = $this->createClientService->execute(
+                new ClientData(
+                    $request->get('name'),
+                    $request->get('address'),
+                    $request->get('description')
+                )
+            );
         } catch (\Exception $e) {
             return response()->json(['message' => 'Can\'t create! ' . $e->getMessage()], 404);
         }
@@ -74,7 +81,14 @@ class ClientController extends Controller
     public function update(int $id, ClientRequest $request)
     {
         try {
-            $data = $this->updateClientService->execute($id, $request);
+            $data = $this->updateClientService->execute(
+                new ClientData(
+                    $request->get('name'),
+                    $request->get('address'),
+                    $request->get('description'),
+                    $id
+                )
+            );
         } catch (\Exception $e) {
             return response()->json(['message' => 'Not found! ' . $e->getMessage()], 404);
         }

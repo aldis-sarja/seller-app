@@ -8,6 +8,7 @@ use App\Services\Product\CreateProductService;
 use App\Services\Product\DeleteProductService;
 use App\Services\Product\GetAllProductsService;
 use App\Services\Product\GetProductByIdService;
+use App\Services\Product\ProductData;
 use App\Services\Product\UpdateProductService;
 
 class ProductController extends Controller
@@ -50,7 +51,13 @@ class ProductController extends Controller
     {
 
         try {
-            $data = $this->createProductService->execute($request);
+            $data = $this->createProductService->execute(
+                new ProductData(
+                    $request->get('name'),
+                    $request->get('type'),
+                    $request->get('description')
+                )
+            );
         } catch (\Exception $e) {
             return response()->json(['message' => 'Can\'t create! ' . $e->getMessage()], 404);
         }
@@ -76,7 +83,14 @@ class ProductController extends Controller
     public function update(int $id, ProductRequest $request)
     {
         try {
-            $data = $this->updateProductService->execute($id, $request);
+            $data = $this->updateProductService->execute(
+                new ProductData(
+                    $request->get('name'),
+                    $request->get('type'),
+                    $request->get('description'),
+                    $id
+                )
+            );
         } catch (\Exception $e) {
             return response()->json(['message' => 'Not found! ' . $e->getMessage()], 404);
         }

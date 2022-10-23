@@ -2,13 +2,19 @@
 
 namespace App\Services\Product;
 
-use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 
 class UpdateProductService extends ProductService
 {
-    public function execute(int $id, ProductRequest $request): Product
+    public function execute(ProductData $productData): Product
     {
-        return $this->productRepository->updateProduct($id, $request);
+        return $this->productRepository->updateProduct(
+            new \App\Models\ProductData(
+                $productData->getName(),
+                $productData->getType(),
+                $productData->getDescription(),
+                $productData->getId()
+            )
+        );
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\ProductRequest;
+use App\Models\ProductData;
 use App\Models\Service;
 use App\Repositories\ProductRepositoryInterface;
 use App\Models\Product;
@@ -20,22 +20,22 @@ class ProductRepository implements ProductRepositoryInterface
         return Product::with('service.client')->findOrFail($id);
     }
 
-    public function createProduct(ProductRequest $request): Product
+    public function createProduct(ProductData $productData): Product
     {
         return Product::create([
-            'name' => $request->get('name'),
-            'type' => $request->get('type'),
-            'description' => $request->get('description')
+            'name' => $productData->getName(),
+            'type' => $productData->getType(),
+            'description' => $productData->getDescription()
         ]);
     }
 
-    public function updateProduct(int $id, ProductRequest $request): Product
+    public function updateProduct(ProductData $productData): Product
     {
-        $product = Product::with('service.client')->findOrFail($id);
+        $product = Product::with('service.client')->findOrFail($productData->getId());
         $product->update([
-            'name' => $request->get('name'),
-            'type' => $request->get('type'),
-            'description' => $request->get('description')
+            'name' => $productData->getName(),
+            'type' => $productData->getType(),
+            'description' => $productData->getDescription()
         ]);
         return $product;
     }

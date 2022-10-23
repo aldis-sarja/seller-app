@@ -2,13 +2,13 @@
 
 namespace App\Repositories;
 
-use App\Http\Requests\ClientRequest;
+use App\Models\ClientData;
 
 interface ClientRepositoryInterface
 {
     public function getAllClients();
     public function getClientById($id);
-    public function createClient(ClientRequest $request);
-    public function updateClient(int $id, ClientRequest $request);
+    public function createClient(ClientData $clientData);
+    public function updateClient(ClientData $clientData);
     public function deleteClient(int $id);
 }

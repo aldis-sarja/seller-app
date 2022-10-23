@@ -2,12 +2,12 @@
 
 namespace Tests\Unit;
 
-use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Repositories\ProductRepository;
 use App\Services\Product\CreateProductService;
 use App\Services\Product\DeleteProductService;
 use App\Services\Product\GetProductByIdService;
+use App\Services\Product\ProductData;
 use App\Services\Product\UpdateProductService;
 use Tests\Testcase;
 
@@ -31,11 +31,11 @@ class ProductTest extends TestCase
 
     public function test_it_should_be_able_to_create_product()
     {
-        $request = new ProductRequest([
-            'name' => 'TV01',
-            'type' => 'electronics',
-            'description' => 'The thing, that we almost are not using',
-        ]);
+        $request = new ProductData(
+            'TV01',
+            'electronics',
+            'The thing, that we almost are not using'
+        );
 
         $product = (new CreateProductService(new ProductRepository))->execute($request);
 
@@ -47,11 +47,11 @@ class ProductTest extends TestCase
 
     public function test_it_should_be_able_to_get_product_by_id()
     {
-        $request = new ProductRequest([
-            'name' => 'TV01',
-            'type' => 'electronics',
-            'description' => 'The thing, that we almost are not using',
-        ]);
+        $request = new ProductData(
+            'TV01',
+            'electronics',
+            'The thing, that we almost are not using'
+        );
 
         (new CreateProductService(new ProductRepository))->execute($request);
 
@@ -65,21 +65,22 @@ class ProductTest extends TestCase
 
     public function test_it_should_be_able_to_update_product()
     {
-        $request = new ProductRequest([
-            'name' => 'TV01',
-            'type' => 'electronics',
-            'description' => 'The thing, that we almost are not using',
-        ]);
+        $request = new ProductData(
+            'TV01',
+            'electronics',
+            'The thing, that we almost are not using'
+        );
 
         $product = (new CreateProductService(new ProductRepository))->execute($request);
 
-        $request = new ProductRequest([
-            'name' => 'TV02',
-            'type' => 'vegetable',
-            'description' => 'Don\'t eat!',
-        ]);
+        $request = new ProductData(
+            'TV02',
+            'vegetable',
+            'Don\'t eat!',
+            $product->id
+        );
 
-        $product = (new UpdateProductService(new ProductRepository))->execute($product->id, $request);
+        $product = (new UpdateProductService(new ProductRepository))->execute($request);
 
         $this->assertNotNull($product);
         $this->assertEquals('TV02', $product->name);
@@ -89,11 +90,11 @@ class ProductTest extends TestCase
 
     public function test_it_should_be_able_to_delete_product()
     {
-        $request = new ProductRequest([
-            'name' => 'TV01',
-            'type' => 'electronics',
-            'description' => 'The thing, that we almost are not using',
-        ]);
+        $request = new ProductData(
+            'TV01',
+            'electronics',
+            'The thing, that we almost are not using'
+        );
 
         (new CreateProductService(new ProductRepository))->execute($request);
 
